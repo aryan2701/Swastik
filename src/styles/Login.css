@@ -1,0 +1,88 @@
+/* src/styles/Login.css */
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f6f8; /* Light background for overall contrast */
+}
+
+.login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background-color: #f0f2f5;
+}
+
+.login-form form {
+    background-color: #ffffff;
+    padding: 2rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.login-form h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.login-form label {
+    display: block;
+    text-align: left;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 90%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #4a90e2; /* Light blue for focus state */
+}
+
+.login-form button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4a90e2;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+    background-color: #357ab7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .login-form form {
+        padding: 1.5rem;
+    }
+
+    .login-form h2 {
+        font-size: 1.4rem;
+    }
+}

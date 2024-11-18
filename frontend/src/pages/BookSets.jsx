@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import API from "../services/api";
-import "../styles/GetBookSet.css"; // Import the CSS here
+import "../styles/GetBookset.css"; // Import the CSS here
 
 const BookSets = () => {
   const [bookSets, setBookSets] = useState([]);

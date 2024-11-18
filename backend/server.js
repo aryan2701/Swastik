@@ -15,10 +15,7 @@ connectDB();
 app.use(express.json());
 
 // Use CORS middleware
-app.use(cors({
-    
-    origin:  'http://13.232.63.176'
-}));
+app.use(cors());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));

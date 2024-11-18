@@ -1,0 +1,157 @@
+/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.book-sets-container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9fafc;
+  padding: 20px 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Header */
+.book-sets-container h2 {
+  font-size: 2.2em;
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 4px solid #3498db;
+  padding-bottom: 12px;
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+}
+
+/* Search Bar */
+.search-bar {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+  border-radius: 8px;
+  border: 1px solid #e1e5eb;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+}
+
+/* Grid for Book Sets */
+.book-set-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Book Set Card */
+.book-set-card {
+  background-color: #ffffff;
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.book-set-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Set Info */
+.set-info h3 {
+  font-size: 1.3em;
+  color: #3498db;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.set-info h3:hover {
+  color: #2980b9;
+}
+
+.set-info p {
+  font-size: 1em;
+  color: #555;
+  margin: 4px 0;
+}
+
+.set-info strong {
+  color: #333;
+}
+
+/* Books & Copies Details */
+.details {
+  margin-top: 20px;
+}
+
+.books-details h4, .copies-details h4 {
+  font-size: 1.1em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 600;
+  border-bottom: 2px solid #e1e5eb;
+  padding-bottom: 6px;
+}
+
+.books-list, .copies-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.book-item, .copy-item {
+  background-color: #f5f7fa;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 1em;
+  color: #666;
+  border-left: 3px solid #3498db;
+}
+
+.book-item p, .copy-item p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.book-item strong, .copy-item strong {
+  color: #333;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .book-sets-container h2 {
+    font-size: 1.8em;
+  }
+
+  .book-set-card {
+    padding: 15px;
+  }
+
+  .search-input {
+    font-size: 1em;
+  }
+
+  .book-set-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+}

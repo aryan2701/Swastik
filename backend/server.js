@@ -16,7 +16,8 @@ app.use(express.json());
 
 // Use CORS middleware
 app.use(cors({
-    // Allow requests from this origin
+    
+    origin:  'http://13.232.63.176'
 }));
 
 // Routes

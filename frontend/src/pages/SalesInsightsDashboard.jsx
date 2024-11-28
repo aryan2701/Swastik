@@ -128,7 +128,7 @@ const SalesInsightsDashboard = () => {
         variant="h3"
         gutterBottom
         align="center"
-        sx={{ fontSize: "2rem", marginBottom: "1rem" }}
+        sx={{ fontSize: { xs: "1.5rem", sm: "2rem" }, marginBottom: "1rem" }}
       >
         Sales Insights Dashboard
       </Typography>
@@ -137,7 +137,7 @@ const SalesInsightsDashboard = () => {
         variant="h5"
         gutterBottom
         align="center"
-        sx={{ fontSize: "1.5rem", marginBottom: "1.5rem" }}
+        sx={{ fontSize: { xs: "1rem", sm: "1.5rem" }, marginBottom: "1.5rem" }}
       >
         Total Revenue: ₹{(salesData.totalRevenue || 0).toFixed(2)}
       </Typography>
@@ -224,6 +224,7 @@ const SalesInsightsDashboard = () => {
               component={Paper}
               sx={{
                 maxHeight: "400px", // Add vertical scroll
+                overflowY: "auto",
               }}
             >
               <Table stickyHeader>

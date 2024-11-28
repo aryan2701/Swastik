@@ -180,4 +180,36 @@ ul li {
   .sales-card ul li {
     font-size: 0.8rem; /* Adjust text size on mobile */
   }
+
+  .total-revenue {
+    font-size: 1.4rem; /* Smaller font for mobile */
+    padding: 8px;
+  }
+}
+
+/* Adjustments for very small screens */
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.6rem; /* Smaller title */
+  }
+
+  .total-revenue {
+    font-size: 1.2rem; /* Further reduce font size */
+  }
+
+  .chart-card {
+    padding: 8px; /* Even smaller padding */
+  }
+
+  .chart {
+    height: 250px; /* Further reduce chart height */
+  }
+
+  .sales-card h6 {
+    font-size: 1rem; /* Smaller card heading */
+  }
+
+  .sales-card ul li {
+    font-size: 0.75rem; /* Further reduce font size */
+  }
 }

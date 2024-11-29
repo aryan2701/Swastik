@@ -114,51 +114,87 @@ const ProductSaleForm = () => {
     // Invoice Details
     doc.setFontSize(7);
     doc.text(`Date: ${invoiceData.date}`, 4, 20);
-    doc.text(`Receipt No: ${receiptCounter}`, 4, 25); // Auto-incremented receipt number
+    doc.text(`Receipt No: ${receiptCounter}`, 4, 25);
 
     // Store Information
     doc.text("B-71, Shastripuram, Sikandra, Agra", 4, 30);
     doc.text("Contact: 9927128973, 9760018973", 4, 35);
 
-    // Sale Type (for distinguishing different receipts like product sale, book set sale, etc.)
+    // Sale Type
     doc.setFontSize(7);
-    doc.text(`Sale Type: ${saleType}`, 4, 40); // Display sale type like "Product Sale" or "Book Set Sale"
 
     // Item Table Header
     let yPos = 47;
-    doc.line(4, yPos, 54, yPos); // Top border of table
-    yPos += 4;
-    doc.setFontSize(7);
-    doc.text("Item", 5, yPos);
-    doc.text("Rate", 26, yPos, { align: "center" });
-    doc.text("Qty", 38, yPos, { align: "center" });
-    doc.text("Amt", 50, yPos, { align: "center" });
+    const startX = 4;
+    const colWidths = [22, 8, 8, 10]; // Column widths for Item, Rate, Qty, Amt
+    doc.line(startX, yPos - 3, startX + 50, yPos - 3); // Top border of table
+    yPos += 2;
+    doc.text("Item", startX + 1, yPos);
+    doc.text("Rate", startX + colWidths[0] + 1, yPos, { align: "center" });
+    doc.text("Qty", startX + colWidths[0] + colWidths[1] + 1, yPos, {
+      align: "center",
+    });
+    doc.text(
+      "Amt",
+      startX + colWidths[0] + colWidths[1] + colWidths[2] + 1,
+      yPos,
+      { align: "center" }
+    );
 
     // Line under header
     yPos += 2;
-    doc.line(4, yPos, 54, yPos);
+    doc.line(startX, yPos, startX + 50, yPos);
 
     // Populate Items in the Table
     yPos += 4;
-    invoiceData.orderItems.forEach((item) => {
-      doc.text(item.productName, 5, yPos, { maxWidth: 18 });
-      doc.text(`${Math.round(item.pricePerUnit)}`, 26, yPos, {
+
+    const addRow = (name, rate, qty, amt) => {
+      const wrappedText = doc.splitTextToSize(name, colWidths[0]); // Wrap item names to fit in column width
+      const rowHeight = wrappedText.length * 4; // Calculate row height based on wrapped lines
+
+      wrappedText.forEach((line, index) => {
+        doc.text(line, startX + 1, yPos + index * 4); // Item column
+      });
+
+      // Remove decimals: use Math.round to round the price, quantity, and total
+      doc.text(`${Math.round(rate)}`, startX + colWidths[0] + 1, yPos, {
         align: "center",
       });
-      doc.text(`${item.quantity}`, 38, yPos, { align: "center" });
-      doc.text(`${Math.round(item.totalPrice)}`, 50, yPos, { align: "center" });
-      yPos += 4;
+      doc.text(
+        `${Math.round(qty)}`,
+        startX + colWidths[0] + colWidths[1] + 1,
+        yPos,
+        { align: "center" }
+      );
+      doc.text(
+        `${Math.round(amt)}`,
+        startX + colWidths[0] + colWidths[1] + colWidths[2] + 1,
+        yPos,
+        { align: "center" }
+      );
+
+      yPos += rowHeight + 2; // Move to the next row
+    };
+
+    invoiceData.orderItems.forEach((item) => {
+      const price = parseFloat(item.pricePerUnit) || 0;
+      const quantity = parseInt(item.quantity, 10) || 0;
+      const total = price * quantity;
+      addRow(item.productName, price, quantity, total);
     });
 
     // Line below item rows
-    doc.line(4, yPos, 54, yPos);
+    doc.line(startX, yPos, startX + 50, yPos);
 
     // Totals Section
     yPos += 4;
-    doc.text("Total", 30, yPos, { align: "right" });
-    doc.text(`${Math.round(invoiceData.totalPrice)}`, 50, yPos, {
+    doc.setFontSize(7);
+    doc.text("Total", startX + colWidths[0] + colWidths[1], yPos, {
       align: "right",
-    }); // Total price without rupee symbol
+    });
+    doc.text(`${Math.round(invoiceData.totalPrice)}`, startX + 50 - 1, yPos, {
+      align: "right",
+    });
 
     // Footer
     yPos += 8;
@@ -166,12 +202,10 @@ const ProductSaleForm = () => {
     doc.text("Thank you for shopping with us!", 29, yPos, { align: "center" });
 
     // Save the PDF
-    doc.save(`${saleType}_invoice_${receiptCounter}.pdf`); // Save file with receipt type and number
+    doc.save(`${saleType}_invoice_${receiptCounter}.pdf`);
 
-    // Increment the receipt number for next sale
-    receiptCounter++; // Increment the counter
-
-    // Save the new receipt number back to localStorage
+    // Increment and save receipt number
+    receiptCounter++;
     localStorage.setItem("receiptCounter", receiptCounter);
   };
 

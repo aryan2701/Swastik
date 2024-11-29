@@ -39,7 +39,7 @@ const ProductSaleForm = () => {
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    setQuantity(isNaN(value) || value <= 0 ? 1 : value);
+    setQuantity(isNaN(value) || value <= 0 ? 0 : value);
   };
 
   const addProductToOrder = () => {
@@ -234,8 +234,8 @@ const ProductSaleForm = () => {
         <label>Quantity:</label>
         <input
           type="number"
-          min="1"
-          value={quantity || 1}
+          min="0"
+          value={quantity}
           onChange={handleQuantityChange}
         />
 

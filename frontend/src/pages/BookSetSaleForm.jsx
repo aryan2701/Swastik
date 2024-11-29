@@ -106,8 +106,7 @@ const BookSetSaleForm = () => {
     }
   };
 
-  const generatePDF = (invoiceData, saleType) => {
-    // Retrieve the last used receipt number from localStorage
+const generatePDF = (invoiceData, saleType) => {
     let receiptCounter = parseInt(
       localStorage.getItem("receiptCounter") || "1",
       10
@@ -124,75 +123,100 @@ const BookSetSaleForm = () => {
     // Invoice Details
     doc.setFontSize(7);
     doc.text(`Date: ${invoiceData.date}`, 4, 20);
-    doc.text(`Receipt No: ${receiptCounter}`, 4, 25); // Auto-incremented receipt number
+    doc.text(`Receipt No: ${receiptCounter}`, 4, 25);
 
-    // Store Information
     doc.text("B-71, Shastripuram, Sikandra, Agra", 4, 30);
     doc.text("Contact: 9927128973, 9760018973", 4, 35);
 
-    // Sale Type
-    doc.setFontSize(7);
-    doc.text(`Sale Type: ${saleType}`, 4, 40); // Display sale type like "Product Sale" or "Book Set Sale"
+    doc.text(`Sale Type: ${saleType}`, 4, 40);
 
-    // Item Table Header
+    // Table Header
     let yPos = 47;
-    doc.line(4, yPos, 54, yPos); // Top border of table
-    yPos += 4;
+    const startX = 4;
+    const colWidths = [22, 8, 8, 10]; // Column widths for Item, Rate, Qty, Amt
+    doc.line(startX, yPos - 3, startX + 50, yPos - 3); // Top border of table
+    yPos += 2;
     doc.setFontSize(7);
-    doc.text("Item", 5, yPos);
-    doc.text("Rate", 26, yPos, { align: "center" });
-    doc.text("Qty", 38, yPos, { align: "center" });
-    doc.text("Amt", 50, yPos, { align: "center" });
+    doc.text("Item", startX + 1, yPos);
+    doc.text("Rate", startX + colWidths[0] + 1, yPos, { align: "center" });
+    doc.text("Qty", startX + colWidths[0] + colWidths[1] + 1, yPos, {
+      align: "center",
+    });
+    doc.text(
+      "Amt",
+      startX + colWidths[0] + colWidths[1] + colWidths[2] + 1,
+      yPos,
+      { align: "center" }
+    );
 
     // Line under header
     yPos += 2;
-    doc.line(4, yPos, 54, yPos);
+    doc.line(startX, yPos, startX + 50, yPos);
 
     // Populate Items in the Table
     yPos += 4;
+
+    const addRow = (name, rate, qty, amt) => {
+      const wrappedText = doc.splitTextToSize(name, colWidths[0]); // Wrap item names to fit in column width
+      const rowHeight = wrappedText.length * 4; // Calculate row height based on wrapped lines
+
+      wrappedText.forEach((line, index) => {
+        doc.text(line, startX + 1, yPos + index * 4); // Item column
+      });
+
+      // Remove decimals: use Math.round to round the price, quantity, and total
+      doc.text(`${Math.round(rate)}`, startX + colWidths[0] + 1, yPos, {
+        align: "center",
+      });
+      doc.text(
+        `${Math.round(qty)}`,
+        startX + colWidths[0] + colWidths[1] + 1,
+        yPos,
+        { align: "center" }
+      );
+      doc.text(
+        `${Math.round(amt)}`,
+        startX + colWidths[0] + colWidths[1] + colWidths[2] + 1,
+        yPos,
+        { align: "center" }
+      );
+
+      yPos += rowHeight + 2; // Move to the next row
+    };
+
+    // Adding book rows
     const books = invoiceData.books || [];
     const copies = invoiceData.copies || [];
 
-    // Add books to the table
     books.forEach((book) => {
-      const price = parseFloat(book.price) || 0; // Ensure price is a valid number
-      const quantity = parseInt(book.quantity, 10) || 0; // Ensure quantity is a valid number
+      const price = parseFloat(book.price) || 0;
+      const quantity = parseInt(book.quantity, 10) || 0;
       const total = price * quantity;
-      doc.text(book.name, 5, yPos, { maxWidth: 18 });
-      doc.text(`${Math.round(price)}`, 26, yPos, { align: "center" });
-      doc.text(`${quantity}`, 38, yPos, { align: "center" });
-      doc.text(`${Math.round(total)}`, 50, yPos, { align: "center" });
-      yPos += 4;
+      addRow(book.name, price, quantity, total);
     });
 
-    // Add copies to the table if included
+    // Adding copy rows if included
     if (invoiceData.includeCopies && copies.length > 0) {
       copies.forEach((copy) => {
         const price = parseFloat(copy.price) || 0;
         const stock = parseInt(copy.stock, 10) || 0;
         const total = price * stock;
-        doc.text(copy.name, 5, yPos, { maxWidth: 18 });
-        doc.text(`${Math.round(price)}`, 26, yPos, { align: "center" });
-        doc.text(`${stock}`, 38, yPos, { align: "center" });
-        doc.text(`${Math.round(total)}`, 50, yPos, { align: "center" });
-        yPos += 4;
+        addRow(copy.name, price, stock, total);
       });
     } else if (!invoiceData.includeCopies) {
-      doc.text("Copies not included", 5, yPos, { maxWidth: 18 });
-      doc.text("-", 26, yPos, { align: "center" });
-      doc.text("-", 38, yPos, { align: "center" });
-      doc.text("-", 50, yPos, { align: "center" });
-      yPos += 4;
+      addRow("Copies not included", "-", "-", "-");
     }
 
     // Line below item rows
-    doc.line(4, yPos, 54, yPos);
+    doc.line(startX, yPos, startX + 50, yPos);
 
-    // Total Amount Calculation
+    // Totals Section
     yPos += 4;
-    const totalAmount = parseFloat(invoiceData.totalCost) || 0;
-    doc.text("Total", 30, yPos, { align: "right" });
-    doc.text(`${Math.round(totalAmount)}`, 50, yPos, {
+    doc.setFontSize(7);
+    doc.text("Total", startX + colWidths[0] + colWidths[1], yPos, {
+      align: "right",
+    });
+    doc.text(`${Math.round(invoiceData.totalCost)}`, startX + 50 - 1, yPos, {
       align: "right",
     });
 
@@ -202,12 +226,10 @@ const BookSetSaleForm = () => {
     doc.text("Thank you for shopping with us!", 29, yPos, { align: "center" });
 
     // Save the PDF
-    doc.save(`${saleType}_invoice_${receiptCounter}.pdf`); // Save file with receipt type and number
+    doc.save(`${saleType}_invoice_${receiptCounter}.pdf`);
 
-    // Increment the receipt number for next sale
-    receiptCounter++; // Increment the counter
-
-    // Save the new receipt number back to localStorage
+    // Increment and save receipt number
+    receiptCounter++;
     localStorage.setItem("receiptCounter", receiptCounter);
   };
 

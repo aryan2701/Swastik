@@ -107,9 +107,9 @@ const ProductSaleForm = () => {
 
     // Header Section
     doc.setFontSize(9);
-    doc.text("SWASTIK TRADING", 29, 8, { align: "center" });
+    doc.text("SWASTIK TRADERS", 29, 8, { align: "center" });
     doc.setFontSize(8);
-    doc.text("GST No. 09BQQPS2342E1ZK", 29, 13, { align: "center" });
+    doc.text("GST No. 09CASPS6827B1Z6", 29, 13, { align: "center" });
 
     // Invoice Details
     doc.setFontSize(7);

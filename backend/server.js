@@ -15,13 +15,13 @@ connectDB();
 app.use(express.json());
 
 // Use CORS middleware
-const corsOptions = {
-  origin: 'http://3.110.166.73',  // Allow requests from this domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow specific methods
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow specific headers
-};
+const cors = require("cors");
+app.use(cors({
+    origin: "http://3.110.166.73", // Allow only the frontend domain
+    methods: ["GET", "POST", "PUT", "DELETE"], // Explicitly allow PUT and DELETE
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
